@@ -1,2 +1,6 @@
 ---
 # handlers file for ansible-docker-nginx
+
+
+- name: nginx reload
+  command: docker restart {{ docker_name }}

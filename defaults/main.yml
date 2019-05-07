@@ -1,2 +1,14 @@
 ---
 # defaults file for ansible-docker-nginx
+
+services_dir: /opt
+
+docker_image: nginx
+docker_name: nginx
+
+lets_encrypt_rsa_key_size: 2048
+lets_encrypt_account_email: false
+
+generate_certs: false
+
+backends: []

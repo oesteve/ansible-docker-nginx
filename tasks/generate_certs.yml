@@ -1,0 +1,28 @@
+
+
+- name: set domains
+  set_fact: domains="{{ domains | default('') }} -d {{ domain }}"
+  with_items: "{{ item.hostnames }}"
+  loop_control:
+    loop_var: domain
+
+- name: Run lest's encrypt
+  docker_container:
+    name: lets_encrypt
+    auto_remove: yes
+    image: certbot/certbot
+    volumes:
+      - "{{ lets_encrypt_dir }}:/etc/letsencrypt"
+      - "{{ lets_encrypt_dir }}/logs:/var/log/letsencrypt"
+      - "{{ lets_encrypt_web_root }}:/var/www/letsencrypt"
+    command: >
+      certonly --renew-by-default
+      {{ domains }}
+      --cert-name {{ item.name }}
+      --webroot
+      --webroot-path /var/www/letsencrypt
+      --non-interactive
+      --agree-tos
+      {% if lets_encrypt_account_email %}--email {{ lets_encrypt_account_email }}{% endif %}
+      --rsa-key-size {{ lets_encrypt_rsa_key_size }}
+  notify: nginx reload

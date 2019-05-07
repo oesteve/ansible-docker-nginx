@@ -1,2 +1,68 @@
 ---
-# tasks file for ansible-docker-nginx
+- name: Create Nginx conf dir
+  file:
+    path: "{{ nginx_conf_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Create Nginx ssl conf dir
+  file:
+    path: "{{ nginx_conf_dir }}/ssl"
+    state: directory
+    mode: 0755
+
+- name: Create Let's encrypt dir
+  file:
+    path: "{{ lets_encrypt_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Create Let's encrypt log dir
+  file:
+    path: "{{ lets_encrypt_dir }}/logs"
+    state: directory
+    mode: 0755
+
+- name: Create Let's Encrypt webroot
+  file:
+    path: "{{ lets_encrypt_web_root }}"
+    state: directory
+    mode: 0755
+
+- name: Deploy nginx ssl options
+  template:
+    src: nginx/options-ssl-nginx.conf.j2
+    dest: "{{ nginx_conf_dir }}/ssl/options-ssl-nginx.conf"
+    mode: 0644
+
+- name: Generate Diffie-Hellman (DH) key exchange
+  command: openssl dhparam -out {{ nginx_conf_dir }}/ssl/dhparam.pem 2048
+  args:
+    creates: "{{ nginx_conf_dir }}/ssl/dhparam.pem"
+
+- name: Deploy backends templates
+  template:
+    src: nginx/backend.com.conf.j2
+    dest: "{{ nginx_conf_dir }}/{{ item.name }}.conf"
+    mode: 0644
+  with_items: "{{ backends }}"
+  notify: nginx reload
+
+- name: Run docker nginx image
+  docker_container:
+    name: "{{ docker_name }}"
+    state: started
+    image: "{{ docker_image }}"
+    restart_policy: always
+    volumes:
+      - "{{ lets_encrypt_dir }}:/etc/letsencrypt"
+      - "{{ lets_encrypt_web_root }}:/var/www/letsencrypt"
+      - "{{ nginx_conf_dir }}/ssl:/etc/nginx/conf.d/ssl"
+      - "{{ nginx_conf_dir }}/oscaresteve.com.conf:/etc/nginx/conf.d/oscaresteve.com.conf"
+    published_ports:
+      - "80:80"
+      - "443:443"
+
+- include_tasks: generate_certs.yml
+  with_items: "{{ backends }}"
+  when: generate_certs

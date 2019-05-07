@@ -1,31 +1,55 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Nginx in a Docker With Let's Encrypt certs generation
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role require Ubuntu and Docker
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+    services_dir: /opt  # Root dir for container data
+    
+    docker_image: nginx # Docker nginx image
+    docker_name: nginx  # Docker nginx container name
+    
+    lets_encrypt_rsa_key_size: 2048    # Let's Encrypt rsa key size
+    lets_encrypt_account_email: false  # Let's Encrypt  account email (optional)
+    
+    generate_certs: false # Do you want generate/refresh certs ?
+    
+    backends: []          # Backends config
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+N/A
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+A simple example
 
-    - hosts: servers
+    ---
+    - name: Install Nginx Http 2.0 with Let's Encrypt
+      hosts: servers
+      vars:
+        backends:
+          - name: oscaresteve.com
+            hostnames:
+              - oscaresteve.com
+              - www.oscaresteve.com
+            servers:
+              - 172.17.0.1:8088
       roles:
-         - { role: username.rolename, x: 42 }
+        - ansible-docker-nginx
+
+Generate certs as optional var
+
+    ansible-playbook -i inventory/hosts.ini install-nginx.yml --extra-vars "generate_certs=True"
 
 License
 -------
@@ -35,4 +59,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Óscar Esteve - http://oscaresteve.com
