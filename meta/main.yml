@@ -5,5 +5,3 @@ galaxy_info:
   license: BSD
   min_ansible_version: 2.4
   platforms: Ubuntu
-  galaxy_tags: []
-dependencies: []
