@@ -23,10 +23,7 @@ Role Variables
     
     backends: []          # Backends config
 
-Dependencies
-------------
 
-N/A
 
 Example Playbook
 ----------------

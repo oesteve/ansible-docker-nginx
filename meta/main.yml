@@ -1,6 +1,6 @@
 galaxy_info:
   author: oesteve
-  description: your description
+  description: Nginx in a Docker container with Let's Encrypt certs generation
   company: oscaresteve.com
   license: BSD
   min_ansible_version: 2.4
