@@ -1,7 +1,11 @@
 galaxy_info:
   author: oesteve
   description: Nginx in a Docker container with Let's Encrypt certs generation
-  company: oscaresteve.com
   license: BSD
   min_ansible_version: 2.4
-  platforms: Ubuntu
+  platforms:
+    - name: Ubuntu
+      version:
+        - 18.04
+  galaxy_tags: []
+dependencies: []
