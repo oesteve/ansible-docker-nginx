@@ -1,5 +1,4 @@
-
-
+---
 - name: set domains
   set_fact: domains="{{ domains | default('') }} -d {{ domain }}"
   with_items: "{{ item.hostnames }}"
