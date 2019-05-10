@@ -1,7 +1,8 @@
 ---
 # vars file for ansible-docker-nginx
 
-nginx_conf_dir: "{{ services_dir }}/nginx/conf"
+nginx_dir: "{{ services_dir }}/nginx"
+nginx_conf_dir: "{{ nginx_dir }}/conf"
 
 lets_encrypt_web_root: "{{ services_dir }}/letsencrypt/webroot"
 lets_encrypt_dir: "{{ services_dir }}/letsencrypt"

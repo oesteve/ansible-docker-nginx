@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: oesteve
   description: Nginx in a Docker container with Let's Encrypt certs generation
@@ -6,6 +7,6 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       version:
-        - 18.04
+        - bionic
   galaxy_tags: []
 dependencies: []

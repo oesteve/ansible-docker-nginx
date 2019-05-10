@@ -1,33 +1,34 @@
 ---
-- name: Create Nginx conf dir
-  file:
-    path: "{{ nginx_conf_dir }}"
-    state: directory
-    mode: 0755
+- name: Install apt dependencies
+  apt:
+    name:
+      - openssl
+      - python-pip
+      - python-setuptools
 
-- name: Create Nginx ssl conf dir
-  file:
-    path: "{{ nginx_conf_dir }}/ssl"
-    state: directory
-    mode: 0755
+- name: Install pip dependencies
+  pip:
+    name: docker
 
-- name: Create Let's encrypt dir
+- name: Create Nginx dirs
   file:
-    path: "{{ lets_encrypt_dir }}"
+    path: "{{ item }}"
     state: directory
     mode: 0755
+  with_items:
+    - "{{ nginx_dir }}"
+    - "{{ nginx_conf_dir }}"
+    - "{{ nginx_conf_dir }}/ssl"
 
-- name: Create Let's encrypt log dir
+- name: Create Let's Encrypt dirs
   file:
-    path: "{{ lets_encrypt_dir }}/logs"
+    path: "{{ item }}"
     state: directory
     mode: 0755
-
-- name: Create Let's Encrypt webroot
-  file:
-    path: "{{ lets_encrypt_web_root }}"
-    state: directory
-    mode: 0755
+  with_items:
+    - "{{ lets_encrypt_dir }}"
+    - "{{ lets_encrypt_dir }}/logs"
+    - "{{ lets_encrypt_web_root }}"
 
 - name: Deploy nginx ssl options
   template:
