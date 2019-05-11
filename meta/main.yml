@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: ansible-docker-enginx
+  role_name: ansible_docker_enginx
   author: oesteve
   description: Nginx in a Docker container with Let's Encrypt certs generation
   license: BSD
